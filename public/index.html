@@ -73,13 +73,11 @@
     }
 
     #root {
-      display: none;
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      pointer-events: none;
     }
   </style>
 </head>
@@ -91,7 +89,7 @@
     <canvas id="unity-canvas" data-pixel-art="{{{ OPTIMIZE_FOR_PIXEL_ART }}}"></canvas>
     <div id="loading" class="loading-container">
       <div class="logo-image-container">
-        <img class="logo-image" src="./images/pacverse_logo.png" />
+        <img class="logo-image" src="./hive_symbol.png" />
       </div>
       <div class="round-effect"></div>
       <div class="bottom-effect"></div>
@@ -117,16 +115,17 @@
         dataUrl: "Build/{{{ DATA_FILENAME }}}",
         frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
         codeUrl: "Build/{{{ CODE_FILENAME }}}",
-        #if MEMORY_FILENAME
-            memoryUrl: "Build/{{{ MEMORY_FILENAME }}}",
-        #endif
-    #if SYMBOLS_FILENAME
-            symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
-        #endif
-            streamingAssetsUrl: "StreamingAssets",
+        streamingAssetsUrl: "StreamingAssets",
         companyName: "{{{ COMPANY_NAME }}}",
         productName: "{{{ PRODUCT_NAME }}}",
         productVersion: "{{{ PRODUCT_VERSION }}}",
+        // #if MEMORY_FILENAME
+        //     memoryUrl: "Build/{{{ MEMORY_FILENAME }}}",
+        // #endif
+        // #if SYMBOLS_FILENAME
+        //     symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+        // #endif
+        
       };
       var scaleToFit;
       try {
@@ -138,7 +137,8 @@
         var bar = document.getElementById('bar');
         var barText = document.getElementById('bar-text');
         bar.style.width = 100 * progress + '%';
-        barText.innerText = "Loading... " + (progress * 100).toFixed(0) + "%"
+        barText.innerText = "Loading... " + (progress * 100).toFixed(0) + "%";
+        if (progress == 1) document.getElementById('keychain-modal').style.display="flex";
       }
       function onResize() {
         var container = canvas.parentElement;
@@ -152,28 +152,25 @@
           w = window.innerWidth;
           h = window.innerHeight;
 
-          var r = {{{ HEIGHT }
-        }
-      } / {{{ WIDTH }}};
-      // var r = 1280 / 1920;
+          // var r = {{{ HEIGHT }}} / {{{ WIDTH }}};
+          var r = 1080 / 1920;
 
-      if (w * r > window.innerHeight) {
-        w = Math.min(w, Math.ceil(h / r));
-      }
-      h = Math.floor(w * r);
-          } else {
-        w = {{ { WIDTH } }
-      };
-      h = {{ { HEIGHT } }};
-            // w = 1920;
-            // h = 1080;
+          if (w * r > window.innerHeight) {
+            w = Math.min(w, Math.ceil(h / r));
           }
-
-      container.style.width = canvas.style.width = w + "px";
-      container.style.height = canvas.style.height = h + "px";
-      container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
-      container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+          h = Math.floor(w * r);
+        } else {
+          // w = {{ { WIDTH } }};
+          // h = {{ { HEIGHT } }};
+          w = 1920;
+          h = 1080;
         }
+
+        container.style.width = canvas.style.width = w + "px";
+        container.style.height = canvas.style.height = h + "px";
+        container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
+        container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+      }
 
       createUnityInstance(canvas, config, progressHandler).then(function (instance) {
         unityInstance = instance;

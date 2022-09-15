@@ -11,6 +11,7 @@ const queryString = require('query-string');
 
 class MainPage extends React.Component {
 
+    
     login_refresh = (event) => {
         if (event.origin !== "http://localhost:4002" && event.origin !== "https://back.downvotecontrol.com")
             return;
@@ -34,7 +35,7 @@ class MainPage extends React.Component {
 
     render() {
 
-        if (this.props.logged_user === "") {
+        if (this.props.logged_user === "" ) {
 
             return (
                 <Login />

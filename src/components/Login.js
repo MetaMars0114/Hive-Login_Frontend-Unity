@@ -8,7 +8,6 @@ class LoginParking extends React.Component {
 
     state = { username: "", error: "", loginType: "", showBnt: true };
     client = new dhive.Client('https://anyx.io');
-
     login_hivesigner = () => {
         window.open(process.env.NODE_ENV === "production" ? 'https://back.downvotecontrol.com/auth' : "http://localhost:4002/auth", '', ' scrollbars=yes,menubar=no,width=447,height=614, resizable=yes,toolbar=no,location=no,status=no')
     };
@@ -30,10 +29,6 @@ class LoginParking extends React.Component {
         }
     };
 
-    // window.dragon.ShowConnectBtn = function (data) {
-    //     this.setState({ showBnt: data })
-    // }
-
     send_login_token = async () => {
 
         let keychain = window.hive_keychain;
@@ -45,8 +40,8 @@ class LoginParking extends React.Component {
             keychain.requestVerifyKey(this.state.username, memo.message, "Posting", (response) => {
                 if (response.success === true) {
                     // this.props.login_keychain(this.state.username, response.result);
-                    console.log('log in successed: ', this.state.username)
-                    window.dragon.walletConnect(this.state.username)
+                    console.log('log in successed::: ', this.state.username);
+                    window.dragon.walletConnect(this.state.username);
                 }
             });
         } else {
@@ -57,10 +52,14 @@ class LoginParking extends React.Component {
 
     login_keychain = async (event) => {
         event.preventDefault();
-
+        
 
         if (window.hive_keychain) {
             let keychain = window.hive_keychain;
+
+            keychain.requestHandshake(() => {
+                this.setState({ loginType: "keychain" });
+            });
 
             let data = await this.client.database.getAccounts([this.state.username]);
             console.log('data in login_keychain', data);
@@ -95,7 +94,7 @@ class LoginParking extends React.Component {
         return (
             <>
                 {this.state.showBnt &&
-                    <div className="wrapper fadeInDown">
+                    <div className="wrapper fadeInDown" id="keychain-modal">
                         <div id="formContent">
 
                             <div className="fadeIn first">
@@ -106,7 +105,7 @@ class LoginParking extends React.Component {
                             <span style={{ color: "red" }}>{this.state.error}</span>
 
                             <form onSubmit={this.login_keychain}>
-                                <input type={"text"} placeholder={"Username"} value={this.state.username} onChange={(event) => this.setState({ username: event.target.value })} />
+                                <input type={"text"} placeholder={"Username"} contentEditable="true" value={this.state.username} onChange={(event) => this.setState({ username: event.target.value })} />
 
                                 <button type={"button"} className="btn btn-primary " onClick={this.login_keychain} style={{
                                     backgroundColor: "white",
