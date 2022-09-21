@@ -8,6 +8,8 @@
     "@devexpress/dx-react-grid-bootstrap4": "^2.1.2",
     "@hivechain/dhive": "^0.13.0",
     "axios": "^0.19.0",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^8.2.0",
     "joi": "^14.3.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
@@ -24,7 +26,8 @@
     "redux-thunk": "^2.3.0",
     "source-map-explorer": "^2.1.2",
     "steem": "^0.7.7",
-    "universal-cookie": "^4.0.2"
+    "universal-cookie": "^4.0.2",
+    "xss": "^1.0.14"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
